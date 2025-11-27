@@ -177,7 +177,7 @@
   {/if}
   <div
     id="machine"
-    class="rounded-[15px] m-auto dark:bg-(--grey) bg-(--light-grey) w-[100%] h-fit p-[2%] flex flex-row justify-between"
+    class="rounded-[15px] m-auto dark:bg-(--grey) bg-(--light-grey) w-full h-fit p-[2%] flex flex-row justify-between"
   >
     <div class="box">{one}</div>
     <div class="box">{two}</div>
@@ -195,12 +195,12 @@
     />
   {/if}
 </div>
-<h1 id="message" class="text-center m-auto text-[2rem] h-[3rem]">{msg}</h1>
+<h1 id="message" class="text-center m-auto text-[2rem] h-12">{msg}</h1>
 <div id="spindiv" class="w-[50%] h-fit m-auto text-center flex flex-col">
   <button
     on:click={spin}
     aria-label="Spin Button"
-    class="m-auto size-[7rem] bg-red-500 transition duration-500 hover:bg-green-500 rounded-full border-0"
+    class="m-auto size-28 bg-red-500 transition duration-500 hover:bg-green-500 rounded-full border-0"
   ></button>
   <span class="flex flex-row justify-center text-center w-[50%] m-auto"
     ><p class="text-[2rem] m-2">Spin Price:</p>
