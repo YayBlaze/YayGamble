@@ -1,1 +1,0 @@
-import{f as o,a}from"../chunks/C6EFBxso.js";import"../chunks/BBB0d4XK.js";import{e}from"../chunks/Gy7_sNZd.js";var m=o('<title>Admin Dashboard</title> <h1 class="text-[3rem] text-center"><strong>Admin Dashboard</strong></h1>',1);function p(t){var r=m();e(2),a(t,r)}export{p as component};

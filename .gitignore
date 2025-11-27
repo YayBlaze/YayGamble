@@ -1,7 +1,27 @@
-bnr.sh
-frontendBuild
-frontend/node_modules
-frontend/build
-backend/node_modules
-backend/logs/*
-backend/schema.sql
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+#Custom
+legacy
+db/convert.ts
