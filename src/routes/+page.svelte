@@ -1,40 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	let { msg: _msg, color: _color, usr: _usr, pass: _pass } = $props();
-	let msg = $state(_msg);
-	let color = $state(_color);
-	let usr = $state(_usr);
-	let pass = $state(_pass);
+	let { data, form } = $props();
+	let msg = $state(form?.msg ?? data.msg);
+	let color = $state(data.color);
+	let usr = $state(data.usr);
+	let pass = $state(data.pass);
+	let ip = $state('');
 
-	onMount(() => {
-		const msgElem = document.getElementById('msg');
-		if (msgElem) msgElem.style.color = color;
+	onMount(async () => {
+		ip = await fetch('https://api.ipify.org').then((r) => r.text());
 	});
-
-	async function login() {
-		msg = 'Loading...';
-		const res = await fetch('/api/login', {
-			method: 'POST',
-			body: JSON.stringify({
-				usr: usr,
-				pass: pass,
-				ip: await fetch('https://api.ipify.org').then((res) => res.text())
-			}),
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
-		const data = await res.json();
-		if (data.auth) {
-			color = '#32CD32';
-			msg = 'Correct! Redirecting...';
-			let sessionID = data.sessionID
-			
-		} else {
-			color = '#ee2c2c';
-			msg = data.msg;
-		}
-	}
 </script>
 
 <title>Login</title>
@@ -44,16 +19,18 @@
 	class="m-auto mt-[10%] flex size-fit flex-col gap-5 rounded-[10%] bg-[#bbb] p-[5%] text-center shadow-[0_0_50px_15px_#34adfe] dark:bg-[#3c3c3c]"
 >
 	<h1 class="m-0 text-[3rem]">Login</h1>
-	<p class="text-[1.5rem]" id="msg">{msg}</p>
-	<input type="text" bind:value={usr} placeholder="Username" />
-	<input type="password" bind:value={pass} placeholder="Password" />
-	<button
-		id="submit"
-		onclick={login}
-		class="m-auto rounded-[5px] border-2 border-solid border-(--white) bg-[#ccc] p-[3%] text-[1.5rem] text-(--black) hover:shadow-[0_0_10px_5px_#34adfe] dark:bg-[#4c4c4c] dark:text-(--white)"
-		>Login</button
-	>
-	<a href="/new" class="text-[1.5rem]">Or Create a new Account</a>
+	<p class="text-[1.5rem] text-[{color}]" id="msg">{form?.msg ?? msg}</p>
+	<form method="post">
+		<input name="usr" bind:value={usr} placeholder="Username" />
+		<input name="pass" type="password" bind:value={pass} placeholder="Password" />
+		<input name="ip" type="hidden" bind:value={ip} />
+		<button
+			id="submit"
+			class="m-auto rounded-[5px] border-2 border-solid border-(--white) bg-[#ccc] p-[3%] text-[1.5rem] text-(--black) hover:shadow-[0_0_10px_5px_#34adfe] dark:bg-[#4c4c4c] dark:text-(--white)"
+			>Login</button
+		>
+	</form>
+	<a href="/new?usr={usr}" class="text-[1.5rem]">Or Create a new Account</a>
 </div>
 
 <h1 class="mt-[5%] text-center text-[1.5rem]">

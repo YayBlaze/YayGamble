@@ -1,39 +1,15 @@
 <script lang="ts">
-	let user = $state('');
-	let password = $state('');
-	let msg = $state('');
+	import { onMount } from 'svelte';
+	let { data, form } = $props();
+	let msg = $state(form?.msg ?? data.msg);
+	let color = $state(data.color);
+	let usr = $state(data.usr);
+	let pass = $state(data.pass);
+	let ip = $state('');
 
-	async function login() {
-		msg = 'Loading...';
-		if (user.includes(' ') || password.includes(' ')) {
-			msg = 'Please do not include spaces in your username or password.';
-			return;
-		} else if (user.length < 4 || user.length > 15) {
-			msg = 'Your username must be 4-15 characters long';
-			return;
-		} else if (password.length < 4 || user.length > 15) {
-			msg = 'Your password must be 4-15 characters long';
-			return;
-		}
-		const res = await fetch('/api/adduser', {
-			method: 'POST',
-			body: JSON.stringify({
-				usr: user,
-				pass: password,
-				ip: await fetch('https://api.ipify.org').then((res) => res.text())
-			}),
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
-		const data = await res.json()
-    if (data.success) {
-
-    } else if (data.taken) {
-
-    }
-    else msg = "Internal Server Error"
-	}
+	onMount(async () => {
+		ip = await fetch('https://api.ipify.org').then((r) => r.text());
+	});
 </script>
 
 <title>New Account</title>
@@ -43,15 +19,17 @@
 	class="m-auto mt-[10%] flex size-fit flex-col gap-5 rounded-[10%] bg-[#3c3c3c] p-[5%] text-center shadow-[0_0_50px_15px_#34adfe]"
 >
 	<h1 class="m-0 text-[3rem]">Create an Account</h1>
-	<p class="text-[1.5rem] text-[#ee2c2c]">{msg}</p>
-	<input type="text" bind:value={user} placeholder="Username" />
-	<input type="password" bind:value={password} placeholder="Password" />
-	<button
-		id="submit"
-		onclick={login}
-		class="m-auto rounded-[5px] border-2 border-solid border-(--white) bg-[#4c4c4c] p-[3%] text-[1.5rem] text-(--white) hover:shadow-[0_0_10px_5px_#34adfe]"
-		>Create Account</button
-	>
+	<p class="text-[1.5rem] text-[{color}]" id="msg">{form?.msg ?? msg}</p>
+	<form method="post">
+		<input name="usr" bind:value={usr} placeholder="Username" />
+		<input name="pass" type="password" bind:value={pass} placeholder="Password" />
+		<input name="ip" type="hidden" bind:value={ip} />
+		<button
+			id="submit"
+			class="m-auto rounded-[5px] border-2 border-solid border-(--white) bg-[#ccc] p-[3%] text-[1.5rem] text-(--black) hover:shadow-[0_0_10px_5px_#34adfe] dark:bg-[#4c4c4c] dark:text-(--white)"
+			>Create Account</button
+		>
+	</form>
 	<a href="/" class="text-[1.5rem]">Or Log in</a>
 </div>
 

@@ -25,7 +25,7 @@ export async function login(usr: string, pass: string) {
 		if (!results || results.length == 0) return { auth, validUsr };
 		else validUsr = true;
 		const hashed: string = await hash(pass);
-		const correct = results[0];
+		const correct = results[0].password;
 		if (correct == hashed) auth = true;
 		return { auth, validUsr };
 	} catch (err: any) {

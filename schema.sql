@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS users;
-
+DROP TABLE IF EXISTS ips;
 CREATE TABLE users (
-    id VARCHAR(36),
+    id CHAR(36),
     username VARCHAR(15),
-    password VARCHAR(15),
+    password CHAR(64),
     balance INT,
-    session_id VARCHAR(26),
+    session_id CHAR(36),
     session_expire LONG,
     allow_collect LONG,
     birth_time LONG,
@@ -15,6 +15,5 @@ CREATE TABLE users (
 CREATE TABLE ips (
     id VARCHAR(255),
     username VARCHAR(15),
-    ip CHAR(15),
-    PRIMARY KEY (id)
+    ip CHAR(15)
 );
