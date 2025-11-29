@@ -40,6 +40,6 @@ export const actions = {
 		);
 		const sessionID = uuid();
 		cookies.set('session', sessionID, { path: '/' });
-		goto('/app/home');
+		goto('/app');
 	}
 } satisfies Actions;
