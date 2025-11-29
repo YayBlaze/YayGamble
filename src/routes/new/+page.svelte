@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	let { data, form } = $props();
+	import type { PageProps } from './$types';
+	let { data, form }: PageProps = $props();
 	let msg = $state(form?.msg ?? data.msg);
 	let color = $state(data.color);
 	let usr = $state(data.usr);

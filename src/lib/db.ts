@@ -1,14 +1,19 @@
 import { DB_HOST, DB_USER, DB_PASS, DB_NAME } from '$env/static/private';
 import mysql from 'mysql2/promise';
 
-const con: mysql.Connection = await mysql.createConnection({
-	host: DB_HOST,
-	user: DB_USER,
-	password: DB_PASS,
-	database: DB_NAME
-});
+var con: mysql.Connection;
 
-export async function sqlRequest(sql: string, args?: any[]): Promise<any> {
+export async function connect() {
+	con = await mysql.createConnection({
+		host: DB_HOST,
+		user: DB_USER,
+		password: DB_PASS,
+		database: DB_NAME
+	});
+}
+
+export async function dbQuery(sql: string, args?: any[]): Promise<any> {
+	if (!con) throw new Error('No database connection');
 	try {
 		const [res, fields] = await con.query(sql, args);
 		return res;
@@ -21,7 +26,7 @@ export async function login(usr: string, pass: string) {
 	try {
 		let auth = false;
 		let validUsr = false;
-		let results: any[] = await sqlRequest('SELECT password FROM users WHERE username = ?', [usr]);
+		let results: any[] = await dbQuery('SELECT password FROM users WHERE username = ?', [usr]);
 		if (!results || results.length == 0) return { auth, validUsr };
 		else validUsr = true;
 		const hashed: string = await hash(pass);

@@ -1,5 +1,5 @@
 import { updateIPs } from '$lib';
-import { hash, login, sqlRequest } from '$lib/sql';
+import { hash, login, dbQuery } from '$lib/db';
 import { fail, type Actions } from '@sveltejs/kit';
 import { v7 as uuid } from 'uuid';
 import { goto } from '$app/navigation';
@@ -29,12 +29,12 @@ export const actions = {
 		} else if (pass.length < 4) {
 			return fail(400, { msg: 'Please do not include spaces in your username or password.' });
 		}
-		let results = await sqlRequest('SELECT id FROM users WHERE username = ?', [usr]);
+		let results = await dbQuery('SELECT id FROM users WHERE username = ?', [usr]);
 		const ip = data.get('ip')?.toString();
 		if (ip) updateIPs(results.id, ip);
 		if (results.length > 0) return fail(400, { msg: 'Username taken' });
 		const id = uuid();
-		await sqlRequest(
+		await dbQuery(
 			'INSERT INTO users (id, username, password, balance, session_id, session_expire, allow_collect, birth_time, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
 			[id, usr, await hash(pass.toString()), 1000, null, null, 0, Date.now(), false]
 		);

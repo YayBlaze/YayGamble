@@ -1,0 +1,23 @@
+import { connect, dbQuery } from '$lib/db';
+import type { Handle, ServerInit } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
+
+export const init: ServerInit = async () => {
+	await connect();
+};
+
+export const handle: Handle = async ({ event, resolve }) => {
+	const sessionID = event.cookies.get('session');
+	event.locals.sessionID = sessionID ?? null;
+	const res = await dbQuery('SELECT session_expire, is_admin, id FROM users WHERE session_id = ?', [
+		sessionID
+	]);
+	if (res.length != 1) return redirect(401, '/?msg=Invalid Session - Log in again');
+	const response = res[0];
+	if (response.session_expire < Date.now())
+		return redirect(401, '/?msg=Session Expired - Log in again');
+	if (event.url.pathname == '/app/admin/' && !response.is_admin) {
+		return redirect(403, '/app');
+	}
+	return await resolve(event);
+};

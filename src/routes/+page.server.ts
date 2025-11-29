@@ -1,5 +1,5 @@
 import { updateIPs } from '$lib';
-import { login, sqlRequest } from '$lib/sql';
+import { login, dbQuery } from '$lib/db';
 import { fail, type Actions } from '@sveltejs/kit';
 import { v7 as uuid } from 'uuid';
 import type { PageServerLoad } from './app/admin/$types';
@@ -22,14 +22,18 @@ export const actions = {
 		if (!pass) return fail(400, { auth: false, msg: 'Please provide a password', usr: usr });
 		const { auth, validUsr } = await login(usr.toString(), pass.toString());
 		if (auth) {
-			const res = await sqlRequest('SELECT id FROM users WHERE username = ?', [usr]);
+			const res = await dbQuery('SELECT id FROM users WHERE username = ?', [usr]);
 			const results = res[0];
 			const ip = data.get('ip')?.toString();
 			if (ip) updateIPs(results.id, ip);
 			const sessionID = uuid();
-			const sessionExpire = Date.now() + (24 * 60 * 60 * 1000)
+			const sessionExpire = Date.now() + 24 * 60 * 60 * 1000;
 			cookies.set('session', sessionID, { path: '/' });
-			await sqlRequest('UPDATE users SET session_id = ?, session_expire = ? WHERE id = ?', [sessionID, sessionExpire, results.id])
+			await dbQuery('UPDATE users SET session_id = ?, session_expire = ? WHERE id = ?', [
+				sessionID,
+				sessionExpire,
+				results.id
+			]);
 			goto('/app');
 		} else if (validUsr) {
 			return fail(401, { auth, msg: 'Incorrect Password', usr: usr });
