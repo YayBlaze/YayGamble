@@ -7,6 +7,7 @@ export const init: ServerInit = async () => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
+	if (event.url.pathname == '/' || event.url.pathname == '/new') return await resolve(event);
 	const sessionID = event.cookies.get('session');
 	event.locals.sessionID = sessionID ?? null;
 	const res = await dbQuery('SELECT session_expire, is_admin, id FROM users WHERE session_id = ?', [
