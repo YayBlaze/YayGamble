@@ -27,7 +27,9 @@ export const actions = {
 			const ip = data.get('ip')?.toString();
 			if (ip) updateIPs(results.id, ip);
 			const sessionID = uuid();
+			const sessionExpire = Date.now() + (24 * 60 * 60 * 1000)
 			cookies.set('session', sessionID, { path: '/' });
+			await sqlRequest('UPDATE users SET session_id = ?, session_expire = ? WHERE id = ?', [sessionID, sessionExpire, results.id])
 			goto('/app/home');
 		} else if (validUsr) {
 			return fail(401, { auth, msg: 'Incorrect Password', usr: usr });
