@@ -1,17 +1,25 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import type { PageProps } from './$types';
 	import { page } from '$app/state';
 	let { data }: PageProps = $props();
-	let id = $state(data.id);
+	const id = data.id;
+	const isAdmin = data.isAdmin;
+
 	let usr = $state(data.usr);
-	let isAdmin = $state(data.isAdmin);
 	let bal = $state(data.balance);
 	let leaderboard = $state(data.leaderboard);
+
 	let allowCollect = $state(data.allowCollect);
-	let cooldown = $derived(allowCollect - Date.now());
+	let currentTime = $state(Date.now());
+	const interval = setInterval(() => {
+		currentTime = Date.now();
+	}, 1000);
+	onDestroy(() => clearInterval(interval));
+	let cooldown = $derived(allowCollect - currentTime);
 	let collectBTN = $derived(calcCooldown(cooldown) ?? 'Collect $1000');
+
 	let msg = $state('');
 	let color = $state('#fff');
 	var dark = $state(false);
@@ -21,10 +29,14 @@
 			color = '#ee2c2c';
 			msg = 'Still on cooldown!';
 		}
-		const res = await fetch('/api/collect', {
+		const res = await fetch('/api/gather', {
 			method: 'POST',
-			body: JSON.stringify({ id })
+			body: JSON.stringify({ id }),
+			headers: {
+				'content-type': 'application/json'
+			}
 		});
+		console.log(res);
 		const data = await res.json();
 		if (data.success) {
 			color = '#50C878';
@@ -48,11 +60,10 @@
 		const minutes = Math.floor((totalSeconds % 3600) / 60);
 		const seconds = totalSeconds % 60;
 
-		const hh = String(hours).padStart(2, '0');
 		const mm = String(minutes).padStart(2, '0');
 		const ss = String(seconds).padStart(2, '0');
 
-		return `Cooldown: ${hh}:${mm}:${ss}`;
+		return `Cooldown: ${mm}:${ss}`;
 	}
 
 	onMount(() => {

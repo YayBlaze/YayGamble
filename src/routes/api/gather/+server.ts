@@ -7,7 +7,11 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (res.length != 1) throw new Error('more than one user with the same id');
 	const response = res[0];
 	if (response.allow_collect <= Date.now()) {
-		await dbQuery('UPDATE users SET balance = ? WHERE id = ?', [response.balance + 1000, id]);
+		await dbQuery('UPDATE users SET balance = ?, allow_collect = ? WHERE id = ?', [
+			response.balance + 1000,
+			Date.now() + 5 * 60 * 1000,
+			id
+		]);
 		return json({ success: true, msg: 'Successfully collected $1000' });
 	} else {
 		return json({ success: false, msg: 'Still on cooldown' });
