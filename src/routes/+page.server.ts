@@ -4,7 +4,12 @@ import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { v7 as uuid } from 'uuid';
 import type { PageServerLoad } from './app/admin/$types';
 
-export const load: PageServerLoad = ({ url }) => {
+export const load: PageServerLoad = async ({ cookies, url }) => {
+	const sessionID = cookies.get('session');
+	const res = await dbQuery('SELECT session_expire, id FROM users WHERE session_id = ?', [
+		sessionID
+	]);
+	if (res.length == 1 && res[0].session_expire > Date.now()) redirect(303, '/app');
 	let searchParams = url.searchParams;
 	let msg = searchParams.get('msg') ?? '';
 	let color = searchParams.get('color') ?? '#ee2c2c';
