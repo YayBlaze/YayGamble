@@ -22,7 +22,7 @@
 
 	let msg = $state('');
 	let color = $state('#fff');
-	var dark = $state(false);
+	var dark = $state(true);
 
 	async function collect() {
 		if (cooldown > 0) {
@@ -67,7 +67,8 @@
 	}
 
 	onMount(() => {
-		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) dark = true;
+		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
+			dark = false;
 	});
 </script>
 

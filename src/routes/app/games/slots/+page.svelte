@@ -16,11 +16,6 @@
 	let megaJackpotMulti = $state(10);
 	let confettiAmount = $state(700);
 
-	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-		megaJackpotMulti = 100;
-		confettiAmount *= 2;
-	}
-
 	let win = $state(false);
 	let jackpot = $state(false);
 
@@ -79,9 +74,15 @@
 			msg = `You lost $${data.diff}`;
 		}
 	}
+
+	onMount(() => {
+		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			megaJackpotMulti = 100;
+			confettiAmount *= 2;
+		}
+	});
 </script>
 
--- Active: 1764277958546@@100.64.0.231@3306@gamble
 <title>Slots</title>
 
 {#if jackpot}
