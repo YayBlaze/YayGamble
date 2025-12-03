@@ -14,18 +14,23 @@ export const POST: RequestHandler = async ({ request }) => {
 	const results = res[0];
 	let bal = results.balance;
 
-	const nums = Array.from({ length: 3 }, () => Math.floor(Math.random() * 10 + 1));
+	const nums = Array.from({ length: 3 }, () => Math.floor(Math.random() * 9 + 1));
 	const [one, two, three] = nums;
 
+	let allSame;
 	if (new Set(nums).size < 3) {
-		const allSame = one === two && two === three;
-		let newBal = bal * (allSame ? (one === 7 ? megaJackpotMulti : jackpotMulti) : winMulti);
+		allSame = one === two && two === three;
+		let newBal = bal + bet * (allSame ? (one === 7 ? megaJackpotMulti : jackpotMulti) : winMulti);
 		diff = newBal - bal;
+		bal = newBal;
+		won = true;
 	} else {
 		diff = bet;
 		won = false;
 		bal -= bet;
 	}
 
-	return json({ won, bal, diff, one, two, three });
+	await dbQuery('UPDATE users SET balance = ? WHERE session_id = ?', [bal, sessionID]);
+
+	return json({ won, jackpot: allSame, bal, diff, one, two, three });
 };

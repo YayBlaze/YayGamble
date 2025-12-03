@@ -7,9 +7,9 @@
 	class="m-auto flex w-[75%] flex-row justify-between rounded-2xl bg-(--light-grey) p-4 text-[1.5rem] dark:bg-(--grey)"
 >
 	<span class="flex w-[40%] flex-row justify-between">
-		<a href="/home"> Home </a>
-		<a href="/games/blackjack">Blackjack</a>
-		<a href="/games/slots">Slots</a>
+		<a href="/app"> Home </a>
+		<a href="/app/games/blackjack">Blackjack</a>
+		<a href="/app/games/slots">Slots</a>
 	</span>
 	<div class="w-[50%]"></div>
 	<button

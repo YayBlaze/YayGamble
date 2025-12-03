@@ -98,7 +98,7 @@
 </div>
 
 <h1 class="m-auto text-center text-[3rem]">Balance = ${bal}</h1>
-<h1 class="m-auto text-center text-[2rem] text-[{color}]" id="msg">{msg}</h1>
+<h1 class="m-auto text-center text-[2rem]" style="color: {color}" id="msg">{msg}</h1>
 
 <div
 	id="play-area"

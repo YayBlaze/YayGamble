@@ -23,20 +23,29 @@
 	let two = $state(7);
 	let three = $state(7);
 
-	let spinning = false;
 	let slowing = false;
-	let spinDelay = 0;
 	let playing = false;
 
 	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-	async function spin() {
-		while (spinning) {
+	async function spin(): Promise<void> {
+		let spinDelay = 0;
+		let diff = 5;
+		let count = 0;
+		const nums = Array.from({ length: 3 }, () => Math.floor(Math.random() * 9 + 1));
+		[one, two, three] = nums;
+		while (true) {
 			await sleep(spinDelay);
-			if (slowing) spinDelay += 5;
-			const nums = Array.from({ length: 3 }, () => Math.floor(Math.random() * 10 + 1));
-			[one, two, three] = nums;
-			if (spinDelay >= 200) spinning = false;
+			if (slowing) {
+				count++;
+				spinDelay += diff;
+				diff += 0.5;
+			}
+			one += one == 9 ? -9 : 1;
+			two += two == 9 ? -9 : 1;
+			three += three == 9 ? -9 : 1;
+			console.log(spinDelay);
+			if (spinDelay >= 200) break;
 		}
 	}
 
@@ -53,9 +62,10 @@
 			bet = bal;
 		}
 		playing = true;
+		win = false;
+		jackpot = false;
 		msg = '';
-		spinDelay = 0;
-		spin();
+		let spinPromise = spin();
 		const res = await fetch('/api/games/slots', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -66,13 +76,19 @@
 		});
 		const data = await res.json();
 		slowing = true;
+		await spinPromise;
+		({ one, two, three } = data);
+		bal = data.bal;
 		if (data.won) {
 			color = '#50C878';
 			msg = `You won $${data.diff}`;
+			if (data.jackpot) jackpot = true;
+			else win = true;
 		} else {
 			color = '#ee2c2c';
 			msg = `You lost $${data.diff}`;
 		}
+		playing = false;
 	}
 
 	onMount(() => {
@@ -146,7 +162,7 @@
 		/>
 	{/if}
 </div>
-<h1 id="message" class="m-auto h-12 text-center text-[2rem] text-[{color}]">{msg}</h1>
+<h1 id="message" class="m-auto h-12 text-center text-[2rem]" style="color: {color}">{msg}</h1>
 <div id="spindiv" class="m-auto flex h-fit w-[50%] flex-col text-center">
 	<button
 		onclick={start}

@@ -20,7 +20,7 @@
 	class="m-auto mt-[10%] flex size-fit flex-col gap-5 rounded-[10%] bg-[#3c3c3c] p-[5%] text-center shadow-[0_0_50px_15px_#34adfe]"
 >
 	<h1 class="m-0 text-[3rem]">Create an Account</h1>
-	<p class="text-[1.5rem] text-[{color}]" id="msg">{form?.msg ?? msg}</p>
+	<p class="text-[1.5rem]" style="color: {color}" id="msg">{form?.msg ?? msg}</p>
 	<form method="post">
 		<input name="usr" bind:value={usr} placeholder="Username" />
 		<input name="pass" type="password" bind:value={pass} placeholder="Password" />
