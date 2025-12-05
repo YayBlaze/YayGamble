@@ -27,7 +27,8 @@
 	async function collect() {
 		if (cooldown > 0) {
 			color = '#ee2c2c';
-			msg = 'Still on cooldown!';
+			msg = 'Still on cooldown';
+			return;
 		}
 		const res = await fetch('/api/gather', {
 			method: 'POST',
@@ -46,6 +47,7 @@
 			leaderboard.sort((a, b) => {
 				return a.balance - b.balance;
 			});
+			allowCollect = Date.now() + 5 * 60 * 1000;
 		} else {
 			color = '#ee2c2c';
 			msg = data.msg ?? page.error?.message ?? 'Internal Server Error';
@@ -55,7 +57,6 @@
 	function calcCooldown(ms: number) {
 		if (ms <= 0) return null;
 		const totalSeconds = Math.floor(ms / 1000);
-		const hours = Math.floor(totalSeconds / 3600);
 		const minutes = Math.floor((totalSeconds % 3600) / 60);
 		const seconds = totalSeconds % 60;
 

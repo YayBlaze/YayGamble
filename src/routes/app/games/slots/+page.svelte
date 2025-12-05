@@ -47,7 +47,6 @@
 			one += one == 9 ? -9 : 1;
 			two += two == 9 ? -9 : 1;
 			three += three == 9 ? -9 : 1;
-			console.log(spinDelay);
 			if (spinDelay >= 200) break;
 		}
 	}

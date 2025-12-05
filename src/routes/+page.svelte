@@ -21,7 +21,7 @@
 >
 	<h1 class="m-0 text-[3rem]">Login</h1>
 	<p class="text-[1.5rem]" style="color: {color}" id="msg">{form?.msg ?? msg}</p>
-	<form method="post">
+	<form method="post" class="flex flex-col gap-4">
 		<input name="usr" bind:value={usr} placeholder="Username" />
 		<input name="pass" type="password" bind:value={pass} placeholder="Password" />
 		<input name="ip" type="hidden" bind:value={ip} />
