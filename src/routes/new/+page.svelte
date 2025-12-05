@@ -1,0 +1,49 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import type { PageProps } from './$types';
+	let { data, form }: PageProps = $props();
+	let msg = $state(form?.msg ?? data.msg);
+	let color = $state(data.color);
+	let usr = $state(data.usr);
+	let pass = $state(data.pass);
+	let ip = $state('');
+
+	onMount(async () => {
+		ip = await fetch('https://api.ipify.org').then((r) => r.text());
+	});
+</script>
+
+<title>New Account</title>
+
+<div
+	id="bigdiv"
+	class="m-auto mt-[10%] flex size-fit flex-col gap-5 rounded-[10%] bg-[#3c3c3c] p-[5%] text-center shadow-[0_0_50px_15px_#34adfe]"
+>
+	<h1 class="m-0 text-[3rem]">Create an Account</h1>
+	<p class="text-[1.5rem]" style="color: {color}" id="msg">{form?.msg ?? msg}</p>
+	<form method="post" class="flex flex-col gap-4">
+		<input name="usr" bind:value={usr} placeholder="Username" />
+		<input name="pass" type="password" bind:value={pass} placeholder="Password" />
+		<input name="ip" type="hidden" bind:value={ip} />
+		<button
+			id="submit"
+			class="m-auto rounded-[5px] border-2 border-solid border-(--white) bg-[#ccc] p-[3%] text-[1.5rem] text-(--black) hover:shadow-[0_0_10px_5px_#34adfe] dark:bg-[#4c4c4c] dark:text-(--white)"
+			>Create Account</button
+		>
+	</form>
+	<a href="/" class="text-[1.5rem]">Or Log in</a>
+</div>
+
+<style>
+	input {
+		background-color: #4c4c4c;
+		color: white;
+		border: 2px solid white;
+		border-radius: 5px;
+		padding: 2%;
+		margin: auto;
+	}
+	input:hover {
+		box-shadow: 0 0 10px 5px #34adfe;
+	}
+</style>

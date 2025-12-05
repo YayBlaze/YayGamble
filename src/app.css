@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Limelight&display=swap');
+@import 'tailwindcss';
+
+:root {
+	--black: #1c1c1c;
+	--grey: #3c3c3c;
+	--white: #fbfbfb;
+	--light-grey: #ddd;
+	--red: #ee2c2c;
+	--yellow: #ffb347;
+	--blue: #34adfe;
+}
+
+* {
+	font-family: 'Nunito', sans-serif;
+}
+a:hover {
+	color: #34adfe;
+	text-decoration: underline wavy;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: var(--black);
+		color: var(--white);
+	}
+}
+
+@media (perfers-color-scheme: light) {
+	body {
+		background-color: var(--white);
+		color: var(--white);
+	}
+	* {
+		font-family: 'Limelight', sans-serif;
+	}
+}
