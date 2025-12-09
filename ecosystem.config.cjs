@@ -3,10 +3,9 @@ module.exports = {
 		{
 			name: 'gamble',
 			script: './build/index.js',
-			interpreter: '/home/blaze/.bun/bin/bun', // insert your own interpreter here
 			env: {
-				PORT: '5301',
-				ORIGIN: 'http://127.0.0.1'
+				PORT: '5300',
+				ORIGIN: 'https://yayblaze.com'
 			}
 		}
 	]
