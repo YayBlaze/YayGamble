@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		leaderboard[i] = { username: lbRes[i].username, balance: lbRes[i].balance };
 	}
 	leaderboard.sort((a, b) => {
-		return a.balance - b.balance;
+		return b.balance - a.balance;
 	});
 	return { id, usr, balance, isAdmin, allowCollect, leaderboard };
 };
