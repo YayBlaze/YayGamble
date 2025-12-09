@@ -45,7 +45,7 @@
 			let index = leaderboard.findIndex((item) => item.username === usr);
 			leaderboard[index] = { username: usr, balance: bal };
 			leaderboard.sort((a, b) => {
-				return a.balance - b.balance;
+				return b.balance - a.balance;
 			});
 			allowCollect = Date.now() + 5 * 60 * 1000;
 		} else {
