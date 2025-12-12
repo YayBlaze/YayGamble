@@ -48,7 +48,8 @@
 			method: 'POST',
 			body: JSON.stringify({
 				sessionID: data.sessionID,
-				bet: lockedBet
+				bet: lockedBet,
+				cards
 			})
 		});
 
@@ -82,7 +83,7 @@
 			const status = data.win;
 			color = status.push ? '#FFAC1C' : status.won ? '#50C878' : '#ee2c2c';
 
-			msg = `${status.push ? 'Push' : `You ${status.won ? 'win' : 'lose'}`} - ${status.msg}`;
+			msg = `${status.push ? '' : `You ${status.won ? 'win' : 'lose'}`} - ${status.msg}`;
 			bal = status.bal;
 			playing = false;
 
@@ -177,7 +178,7 @@
 	class="m-auto mt-6 w-full max-w-[700px] rounded-xl bg-(--light-grey) p-4 text-center shadow-lg dark:bg-(--grey)"
 >
 	<div class="mb-2 text-[1.6rem]">
-		Cards Left: <strong>{cards.length}</strong>
+		Cards Until Shuffle: <strong>{cards.length}</strong>
 	</div>
 
 	{#if !autoBet}
