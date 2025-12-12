@@ -82,7 +82,7 @@
 			const status = data.win;
 			color = status.push ? '#FFAC1C' : status.won ? '#50C878' : '#ee2c2c';
 
-			msg = `You ${status.won ? 'win' : 'lose'} - ${status.msg}`;
+			msg = `${status.push ? 'Push' : `You ${status.won ? 'win' : 'lose'}`} - ${status.msg}`;
 			bal = status.bal;
 			playing = false;
 
