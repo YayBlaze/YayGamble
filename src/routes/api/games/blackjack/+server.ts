@@ -16,7 +16,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	if (cards.length < 3) cards = newDeck();
 
-	console.log(cards);
 	({ playerCards, dealerCards } = buildHands(cards));
 	({ playerValue, dealerValue } = calcValues(playerCards, dealerCards));
 
