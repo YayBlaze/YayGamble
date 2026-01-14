@@ -105,7 +105,15 @@
 <div class="p-[2%]] m-auto mt-[5%] flex size-fit flex-col text-center text-[1.5rem]">
 	<p class="text-[2rem]">Leaderboard</p>
 	{#each leaderboard as item, i}
-		<p>{i + 1}) {item['username']} = ${item['balance']}</p>
+		{#if item['username'] == 'YayBlaze'}
+			<div class="flex flex-row gap-1">
+				<p>{i + 1})</p>
+				<p class="text-[#ee2c2c]">{item['username']}</p>
+				<p>= ${item['balance']}</p>
+			</div>
+		{:else}
+			<p>{i + 1}) {item['username']} = ${item['balance']}</p>
+		{/if}
 	{/each}
 </div>
 
